@@ -1,4 +1,6 @@
 # all our models will go in this file
+#need to import datetime for the DateTimeField
+import datetime
 
 #import everything from peewee... 
 #SqliteDatabase and Model
