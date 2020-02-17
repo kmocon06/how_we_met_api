@@ -36,7 +36,7 @@ class Story(Model):
   #one to many relationship between users and stories
   user_id = ForeignKeyField(User, backref='stories')
   story_content = CharField()
-  image = FileField()
+  image = CharField()
   created_at = DateTimeField(default=datetime.datetime.now)
 
   #special constructor that gives our class instructions on how to

@@ -1,5 +1,8 @@
 from flask import Flask 
 
+import models 
+
+
 DEBUG = True
 PORT = 8000
 
@@ -18,4 +21,5 @@ def index():
 
 #listener
 if __name__ == '__main__':
-  app.run(debug=DEBUG, port=PORT) 
+	models.initialize()
+	app.run(debug=DEBUG, port=PORT) 
