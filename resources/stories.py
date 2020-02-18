@@ -13,6 +13,7 @@ from playhouse.shortcuts import model_to_dict
 stories = Blueprint('stories', 'stories')
 
 
+
 #GET /
 #get all the stories to put in the index route
 #INDEX route 
@@ -34,6 +35,47 @@ def stories_index():
 		message=f"We can see all of the {len(current_user_story_dicts)} stories for {current_user.email}!",
 		status=200
 	), 200
+
+
+#SHOW route 
+#GET /id
+@stories.route('/<id>', methods=['GET'])
+def get_one_story(id):
+	story = models.Story.get_by_id(id)
+
+	#if not logged in then they can just see the title
+	if not current_user.is_authenticated:
+
+		return jsonify(
+			data={
+			"title": story.title
+			},
+			message="You must register to see more about this story",
+			status=200
+		), 200
+
+	#otherwise if they are logged in then they see all the info
+	else:
+		story_dict = model_to_dict(story)
+
+		#if they are logged in then don't show the password
+		story_dict['user_id'].pop('password')
+
+		#user can see created_at if this is their story that was created
+		#other users should not be able to see that if it was not their story
+		#so pop created_at off the list
+		if story.user_id != current_user.id:
+			story_dict.pop('created_at')
+
+		return jsonify(
+			data=story_dict,
+			message=f"We found a story with the id {story.id}",
+			status=200
+		), 200
+
+
+
+
 
 
 #CREATE route
