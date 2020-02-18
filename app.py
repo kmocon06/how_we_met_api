@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, g
 
+#to access react we need CORS
+from flask_cors import CORS
+
 #uses flash to display messages when a user is required to log in
 from flask_login import LoginManager
 
@@ -47,6 +50,12 @@ def unauthorized():
 		message="You are unable to access this. Please login",
 		status=401
 	), 401
+
+
+#CORS- Cross Origin Resource Sharing 
+#we need this to access our react app
+CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(stories, origins=['http://localhost:3000'], supports_credentials=True)
 
 
 #using blueprints-- similar to "controllers"
