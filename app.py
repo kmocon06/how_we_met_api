@@ -26,6 +26,14 @@ login_manager = LoginManager()
 #connect the app with the login manager
 login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(userid):
+	try:
+		return models.User.get(models.User.id == userid)
+	except models.DoesNotExist: 
+
+		return None
+
 
 #using blueprints-- similar to "controllers"
 app.register_blueprint(users, url_prefix='/api/v1/users')
