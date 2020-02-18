@@ -5,6 +5,9 @@ from flask_login import LoginManager
 
 # import blueprints from ./resources/users
 from resources.users import users 
+# import blueprints from ./resources/stories
+from resources.stories import stories
+
 
 #import models
 import models 
@@ -37,6 +40,7 @@ def load_user(userid):
 
 #using blueprints-- similar to "controllers"
 app.register_blueprint(users, url_prefix='/api/v1/users')
+app.register_blueprint(stories, url_prefix='/api/v1/stories')
 
 
 # we don't want to hog up the SQL connection pool
