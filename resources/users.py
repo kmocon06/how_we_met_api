@@ -5,7 +5,7 @@ import models
 from flask import Blueprint, request, jsonify
 
 #import generate_password_hash
-from flask_bcrypt import generate_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 from flask_login import login_user
 
@@ -96,6 +96,57 @@ def register():
 				status=201
 			), 201
 
+#login route
+#POST /
+
+@users.route('/login', methods=['POST'])
+def login():
+	payload = request.get_json()
+
+	payload['email'] = payload['email'].lower()
+	payload['username'] = payload['username'].lower()  
+
+	try: 
+    #we need the user's email
+		user = models.User.get(models.User.email == payload['email'])
+
+		user_dict = model_to_dict(user)
+
+		#check password using bcrypt
+		#first is the encrypted password we are checking
+		#second is the user input
+		password_is_good = check_password_hash(user_dict['password'], payload['password'])
+
+		if password_is_good: 
+		#if the password is gooof then we can login the user
+		#user is in session if password is correct
+			login_user(user)
+
+			user_dict.pop('password')
+
+			return jsonify(
+				data=user_dict,
+				message="{} is currently logged in".format(user_dict['email']),
+				status=200
+				), 200
+
+		else: 
+			print('password invalid')
+
+			return jsonify(
+				data={},
+				message="Email or password is incorrect", 
+				status=401
+			), 401
+
+
+	except models.DoesNotExist: 
+		print('username invalid') 
+		return jsonify(
+			data={},
+			message="Email or password is incorrect", 
+			status=401
+		), 401
 
 
 
