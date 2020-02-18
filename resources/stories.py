@@ -14,10 +14,25 @@ stories = Blueprint('stories', 'stories')
 
 
 #GET /
+#get all the stories to put in the index route
 #INDEX route 
 @stories.route('/', methods=['GET'])
 def stories_index():
-	return "stories index"
+	all_stories_query = models.Story.select()
+
+	stories_dicts = []
+
+	for story in all_stories_query:
+		print(story)
+		print(model_to_dict(story))
+
+		#append(push) each story to the list
+		stories_dicts.append(model_to_dict(story))
+	return jsonify(
+		data=stories_dicts,
+		message=f"We can see all of the {len(stories_dicts)}stories!",
+		status=200
+	), 200
 
 
 #CREATE route
