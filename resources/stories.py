@@ -63,5 +63,26 @@ def create_stories():
 
 
 
+#DESTROY route
+#DELETE /<id>
+#need an id as a param to be able to delete that specific story
+@stories.route('/<id>', methods=['Delete'])
+def delete_story(id):
+	#delete where the storyid = id that you want to delete
+	delete_query = models.Story.delete().where(models.Story.id == id)
+	#after this we need to execute this
+	delete_query.execute()
+
+	return jsonify(
+		data={},
+		message=f"We are able to delete Story with ID of {id}",
+		status=200,
+	), 200
+
+
+
+
+
+
 
 
