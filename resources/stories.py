@@ -39,6 +39,7 @@ def stories_index():
 #CREATE route
 #POST /
 @stories.route('/', methods=['POST'])
+@login_required
 def create_stories():
 	#we need to get the JSON from the req
 	#request.get_json
@@ -69,29 +70,47 @@ def create_stories():
 #UPDATE route
 #PUT /<id>
 @stories.route('/<id>', methods=['PUT'])
+@login_required
 def update_story(id):
+
+	#user is only allowed to update their stories
 	payload = request.get_json()
 
-	update_query = models.Story.update(
-		title=payload['title'],
-		story_content=payload['story_content'],
-		image=payload['image']
-	).where(models.Story.id == id)
+	#user story 
+	story = models.Story.get_by_id(id)
+	print(story)
 
-	#we need to execute the update query
-	update_query.execute()
+	#if the story id is the same as the user's story id
+	#then they can update their own story
+	if story.user_id.id == current_user.id:
+		story.title = payload['title'] if 'title' in payload else None
+		story.story_content = payload['story_content'] if 'story_content' in payload else None
+		story.image = payload['image'] if 'image' in payload else None
 
-	#include the new data 
-	updated_story = models.Story.get_by_id(id)
+		#save the updated story
+		story.save()
 
-	#need to make is json serializable
-	data_for_updated_story = model_to_dict(updated_story)
+		story_dict = model_to_dict(story)
 
-	return jsonify(
-		data=data_for_updated_story,
-		message=f"We have updated story with id of {id}!",
-		status=200
-	), 200
+		return jsonify(
+			data=story_dict,
+			message=f"We updated the story with id {id}",
+			status=200
+		), 200
+
+	#if the story wasn't created by the user that is logged in,
+	#then they shouldn't be able to update
+	else: 
+
+		return jsonify(
+			data= {
+			"error": "You cannot update this story"
+			},
+			message=f"The user story id{story.user_id.id} does not match the current user's id {current_user.id}. User can only update own story",
+			status=403
+		), 403
+
+
 
 
 
