@@ -106,11 +106,9 @@ def update_story(id):
 			data= {
 			"error": "You cannot update this story"
 			},
-			message=f"The user story id{story.user_id.id} does not match the current user's id {current_user.id}. User can only update own story",
-			status=403
+			message=f"The user id for story {story.user_id.id} does not match the current user's id {current_user.id}. User can only update own story",
+			status=403 
 		), 403
-
-
 
 
 
@@ -120,7 +118,37 @@ def update_story(id):
 #DELETE /<id>
 #need an id as a param to be able to delete that specific story
 @stories.route('/<id>', methods=['Delete'])
+@login_required
 def delete_story(id):
+	#get the id of the story you want to delete
+	story_to_delete = models.Story.get_by_id(id)
+	print(story_to_delete)
+
+	#if the current user id is the same as the user's user_id for the story
+	#then we can delete the story
+	if current_user.id == story_to_delete.user_id.id:
+		story_to_delete.delete_instance()
+
+		return jsonify(
+			data={},
+			message=f"We deleted story with the id of {story_to_delete.id}",
+			status = 200
+		), 200
+
+	#otherwise you are not able to delete a story if you are not 
+	#the one who created it
+	else:
+
+		return jsonify(
+			data={
+				"error": "You are unable to delete this story"
+			},
+			message="Story user_id doesn't match current_user who is logged in. Cannot delete story.",
+			status=403
+		), 403
+
+
+
 	#delete where the storyid = id that you want to delete
 	delete_query = models.Story.delete().where(models.Story.id == id)
 	#after this we need to execute this
