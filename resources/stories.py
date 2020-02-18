@@ -62,6 +62,36 @@ def create_stories():
 	), 201
 
 
+#UPDATE route
+#PUT /<id>
+@stories.route('/<id>', methods=['PUT'])
+def update_story(id):
+	payload = request.get_json()
+
+	update_query = models.Story.update(
+		title=payload['title'],
+		story_content=payload['story_content'],
+		image=payload['image']
+	).where(models.Story.id == id)
+
+	#we need to execute the update query
+	update_query.execute()
+
+	#include the new data 
+	updated_story = models.Story.get_by_id(id)
+
+	#need to make is json serializable
+	data_for_updated_story = model_to_dict(updated_story)
+
+	return jsonify(
+		data=data_for_updated_story,
+		message=f"We have updated story with id of {id}!",
+		status=200
+	), 200
+
+
+
+
 
 #DESTROY route
 #DELETE /<id>
