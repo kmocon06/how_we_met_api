@@ -155,15 +155,27 @@ def login():
 def get_logged_in_user():
 
 	#we need the current_user
+	#we should be able to see if a user is logged in or not
+
 	print(current_user)
 
-	user_dict = model_to_dict(current_user)
+	#if user is not logged in, !current_user.is_authenticated 
+	if not current_user.is_authenticated:
+		return jsonify(
+			data={},
+			message="There is no user logged in",
+			status= 401
+		), 401
 
-	return jsonify(
-		data=user_dict,
-		message="user is logged in",
-		status=200
-	), 200
+	#otherwise the user is logged in
+	else:
+		user_dict = model_to_dict(current_user)
+
+		return jsonify(
+			data=user_dict,
+			message=f"{user_dict['username']} is the current user",
+			status=200
+		), 200
 
 
 
@@ -178,7 +190,6 @@ def logout():
 		message="User is now logged out",
 		status=200
 	), 200
-
 
 
 
