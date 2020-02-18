@@ -4,7 +4,7 @@ import models
 from flask import Blueprint, request, jsonify
 
 #we need the current user that is logged in to see all the routes
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 #get model as dict
 from playhouse.shortcuts import model_to_dict
@@ -17,6 +17,7 @@ stories = Blueprint('stories', 'stories')
 #get all the stories to put in the index route
 #INDEX route 
 @stories.route('/', methods=['GET'])
+@login_required
 def stories_index():
 	#all_stories_query = models.Story.select()
 
@@ -30,7 +31,7 @@ def stories_index():
 		current_user_story_dicts.append(model_to_dict(story))
 	return jsonify(
 		data=current_user_story_dicts,
-		message=f"We can see all of the {len(current_user_story_dicts)} stories!",
+		message=f"We can see all of the {len(current_user_story_dicts)} stories for {current_user.email}!",
 		status=200
 	), 200
 
@@ -44,8 +45,11 @@ def create_stories():
 	payload = request.get_json()
 	print(payload)
 
-	story = models.Story.create(user_id=current_user.id,title=payload['title'], 
-		story_content=payload['story_content'], image=payload['image'])
+	story = models.Story.create(
+		user_id=current_user.id,
+		title=payload['title'], 
+		story_content=payload['story_content'], 
+		image=payload['image'])
 
 	print(story.__dict__)
 

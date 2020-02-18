@@ -37,6 +37,17 @@ def load_user(userid):
 
 		return None
 
+#for people that are unauthorized (not logged in)
+@login_manager.unauthorized_handler
+def unauthorized():
+	return jsonify(
+		data={
+		'error': 'user not logged in'
+		},
+		message="You are unable to access this. Please login",
+		status=401
+	), 401
+
 
 #using blueprints-- similar to "controllers"
 app.register_blueprint(users, url_prefix='/api/v1/users')
