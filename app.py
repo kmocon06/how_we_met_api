@@ -5,7 +5,10 @@ from flask import Flask
 #uses flash to display messages when a user is required to log in
 from flask_login import LoginManager
 
+# import blueprints from ./resources/users
+from resources.users import users 
 
+#import models
 import models 
 
 
@@ -24,6 +27,12 @@ login_manager = LoginManager()
 
 #connect the app with the login manager
 login_manager.init_app(app)
+
+
+#using blueprints-- similar to "controllers"
+app.register_blueprint(users, url_prefix='/api/v1/users')
+
+
 
 
 #ROUTES 
