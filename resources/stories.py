@@ -18,19 +18,19 @@ stories = Blueprint('stories', 'stories')
 #INDEX route 
 @stories.route('/', methods=['GET'])
 def stories_index():
-	all_stories_query = models.Story.select()
+	#all_stories_query = models.Story.select()
 
-	stories_dicts = []
+	current_user_story_dicts = []
 
-	for story in all_stories_query:
+	for story in current_user.stories:
 		print(story)
 		print(model_to_dict(story))
 
 		#append(push) each story to the list
-		stories_dicts.append(model_to_dict(story))
+		current_user_story_dicts.append(model_to_dict(story))
 	return jsonify(
-		data=stories_dicts,
-		message=f"We can see all of the {len(stories_dicts)}stories!",
+		data=current_user_story_dicts,
+		message=f"We can see all of the {len(current_user_story_dicts)} stories!",
 		status=200
 	), 200
 
