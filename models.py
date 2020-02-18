@@ -51,7 +51,7 @@ def initialize():
   
   #list of tables to create 
   #this means create tables for user and story only if they don't already exist
-  DATABASE.create_tables([User, Story], safe=True)
+  DATABASE.create_tables([User], safe=True)
   print("Connected to DB and created tables if they weren't already there")
 
   #close the DB connection

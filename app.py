@@ -1,6 +1,4 @@
-from flask import Flask 
-
-
+from flask import Flask, jsonify, g
 
 #uses flash to display messages when a user is required to log in
 from flask_login import LoginManager
@@ -33,6 +31,22 @@ login_manager.init_app(app)
 app.register_blueprint(users, url_prefix='/api/v1/users')
 
 
+# we don't want to hog up the SQL connection pool
+#connect to the DB before every request
+#then close the db connection after every request
+
+@app.before_request 
+def before_request():
+  # store db as global variable in "g"
+	g.db = models.DATABASE
+	g.db.connect()
+
+
+@app.after_request
+def after_request(response):
+
+  	g.db.close()
+  	return response
 
 
 #ROUTES 
