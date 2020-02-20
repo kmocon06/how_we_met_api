@@ -35,7 +35,7 @@ class Story(Model):
   title = CharField()
   #one to many relationship between users and stories
   user_id = ForeignKeyField(User, backref='stories')
-  story_content = CharField()
+  content = CharField()
   image = CharField()
   created_at = DateTimeField(default=datetime.datetime.now)
 
@@ -51,7 +51,7 @@ def initialize():
   
   #list of tables to create 
   #this means create tables for user and story only if they don't already exist
-  DATABASE.create_tables([User], safe=True)
+  DATABASE.create_tables([User, Story], safe=True)
   print("Connected to DB and created tables if they weren't already there")
 
   #close the DB connection

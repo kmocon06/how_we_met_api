@@ -92,7 +92,7 @@ def register():
 
 			return jsonify(
 				data=user_dict,
-				message=f"Successfully registered {user_dict['email']}",
+				message=f"Successfully registered {user_dict['username']}",
 				status=201
 			), 201
 
@@ -108,7 +108,7 @@ def login():
 
 	try: 
     #we need the user's email
-		user = models.User.get(models.User.email == payload['email'])
+		user = models.User.get(models.User.username == payload['username'])
 
 		user_dict = model_to_dict(user)
 
@@ -126,7 +126,7 @@ def login():
 
 			return jsonify(
 				data=user_dict,
-				message="{} is currently logged in".format(user_dict['email']),
+				message="{} is currently logged in".format(user_dict['username']),
 				status=200
 				), 200
 
@@ -135,7 +135,7 @@ def login():
 
 			return jsonify(
 				data={},
-				message="Email or password is incorrect", 
+				message="Username or password is incorrect", 
 				status=401
 			), 401
 
@@ -144,7 +144,7 @@ def login():
 		print('username invalid') 
 		return jsonify(
 			data={},
-			message="Email or password is incorrect", 
+			message="Username or password is incorrect", 
 			status=401
 		), 401
 

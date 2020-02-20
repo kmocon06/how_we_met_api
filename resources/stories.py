@@ -91,7 +91,7 @@ def create_stories():
 	story = models.Story.create(
 		user_id=current_user.id,
 		title=payload['title'], 
-		story_content=payload['story_content'], 
+		content=payload['content'], 
 		image=payload['image'])
 
 	print(story.__dict__)
@@ -126,7 +126,7 @@ def update_story(id):
 	#then they can update their own story
 	if story.user_id.id == current_user.id:
 		story.title = payload['title'] if 'title' in payload else None
-		story.story_content = payload['story_content'] if 'story_content' in payload else None
+		story.content = payload['content'] if 'content' in payload else None
 		story.image = payload['image'] if 'image' in payload else None
 
 		#save the updated story
