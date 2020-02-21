@@ -1,3 +1,6 @@
+#python module for interacting with our operating system.
+import os
+
 # all our models will go in this file
 #need to import datetime for the DateTimeField
 import datetime
@@ -11,8 +14,20 @@ from peewee import *
 #for the methods that Flask-Login expects user objects to have.
 from flask_login import UserMixin
 
-#like MONGO_DB_URL = 'mongodb://localhost/stories', {...}
-DATABASE = SqliteDatabase('stories.sqlite') 
+
+# a Peewee extension for creating a database connection from a URL string.
+from playhouse.db_url import connect
+
+
+if 'ON_HEROKU' in os.environ:  
+                              
+  DATABASE = connect(os.environ.get('DATABASE_URL'))  
+                                                     
+else:
+  DATABASE = SqliteDatabase('stories.sqlite')
+
+
+
 
 #User model for authentication 
 # peewee doesn't have some methods and properties for the User  

@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify, g
 
 #to access react we need CORS
@@ -90,6 +92,11 @@ def index():
   return 'Homepage'
 
 
+
+#for Heroku
+if 'ON_HEROKU' in os.environ: 
+  print('\non heroku!')
+  models.initialize()
 
 #listener
 if __name__ == '__main__':
