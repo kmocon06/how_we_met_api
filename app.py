@@ -56,8 +56,8 @@ def unauthorized():
 
 #CORS- Cross Origin Resource Sharing 
 #we need this to access our react app
-CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(stories, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(users, origins=['http://localhost:3000', 'https://how-we-met-app.herokuapp.com'], supports_credentials=True)
+CORS(stories, origins=['http://localhost:3000', 'https://how-we-met-app.herokuapp.com'], supports_credentials=True)
 
 
 #using blueprints-- similar to "controllers"
