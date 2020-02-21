@@ -15,8 +15,8 @@ stories = Blueprint('stories', 'stories')
 
 
 #GET /
-#get all the stories to put in the index route
-#INDEX route 
+#get all the stories of user to put in the index route
+#INDEX route for user's stories
 @stories.route('/', methods=['GET'])
 @login_required
 def stories_index():
@@ -35,6 +35,30 @@ def stories_index():
 		message=f"We can see all of the {len(current_user_story_dicts)} stories for {current_user.email}!",
 		status=200
 	), 200
+
+#GET /all_stories
+#get stories from all other users
+
+@stories.route('/all_stories', methods=['GET'])
+def get_all_stories():
+	#if the current_user.id is not the current_user then 
+	#we should be able to see all of those stories
+	print(current_user.stories)
+	stories = models.Story.select().where(models.Story.user_id != current_user.id).dicts()
+	print(stories)
+
+	list_of_all_stories = []
+	
+	for story in stories:
+		print(story)
+		list_of_all_stories.append(story)
+
+	return jsonify(
+		data=list_of_all_stories,
+		message=f"this is a list of all the stories {list_of_all_stories}",
+		status=200
+	), 200
+
 
 
 #SHOW route 

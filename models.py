@@ -6,15 +6,13 @@ import datetime
 #SqliteDatabase and Model
 from peewee import *
 
-#like MONGO_DB_URL = 'mongodb://localhost/stories', {...}
-DATABASE = SqliteDatabase('stories.sqlite') 
-
-
 #UserMixin is what we need to make our User model
 #This provides default implementations 
 #for the methods that Flask-Login expects user objects to have.
 from flask_login import UserMixin
 
+#like MONGO_DB_URL = 'mongodb://localhost/stories', {...}
+DATABASE = SqliteDatabase('stories.sqlite') 
 
 #User model for authentication 
 # peewee doesn't have some methods and properties for the User  
